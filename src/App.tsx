@@ -83,7 +83,7 @@ const Navbar = () => {
         <a href="#trust" className="hover:text-brand hover:opacity-100 transition-all">Trust</a>
         <a href="#guide" className="hover:text-brand hover:opacity-100 transition-all">Guide</a>
         <a 
-          href={import.meta.env.VITE_RESERVATION_URL || "#"} 
+          href={"https://naver.me/F0znYoRG"} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="bg-dark text-bg px-6 py-3 hover:bg-brand transition-all"
@@ -180,7 +180,7 @@ export default function App() {
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6">
               <a
-                href={import.meta.env.VITE_RESERVATION_URL || "#"}
+                href={"https://naver.me/F0znYoRG"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cta-primary flex items-center justify-center gap-4 group"
@@ -230,7 +230,7 @@ export default function App() {
       </Section>
 
       {/* SECTION 3. HOW — 어떻게 가능하냐고요? */}
-      <Section dark className="!py-24 md:!py-40 overflow-hidden">
+      <Section id="about" dark className="!py-24 md:!py-40 overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -520,7 +520,7 @@ export default function App() {
             </p>
             <div className="flex flex-col gap-5 md:gap-10 items-center">
               <a 
-                href={import.meta.env.VITE_NAVER_MAP_URL || "#"} 
+                href={"https://naver.me/F0znYoRG"} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="cta-primary w-full max-w-[320px] sm:max-w-md md:max-w-xl flex items-center justify-center gap-4 md:gap-6 group"
@@ -557,10 +557,10 @@ export default function App() {
           {/* Logo removed */}
         </div>
         <div className="flex flex-wrap justify-center gap-12 opacity-50">
-          <a href={import.meta.env.VITE_INSTAGRAM_URL || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Instagram</a>
-          <a href={import.meta.env.VITE_BLOG_URL || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Blog</a>
-          <a href="#" className="hover:text-brand hover:opacity-100 transition-all">About Us</a>
-          <a href={import.meta.env.VITE_NAVER_MAP_URL || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Directions</a>
+          <a href={"https://instagram.com/_bellaceramic"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Instagram</a>
+          <a href={"https://blog.naver.com/bellaceramic1"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Blog</a>
+          <a href="#about" className="hover:text-brand hover:opacity-100 transition-all">About Us</a>
+          <a href={"https://naver.me/F0znYoRG"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Directions</a>
         </div>
         <div className="opacity-30">
           © 2024 All Rights Reserved.
