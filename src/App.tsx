@@ -73,7 +73,7 @@ const Section = ({ children, className, id, dark = false, style }: { children: R
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center bg-bg/80 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 w-full z-50 px-6 py-3 md:px-8 md:py-4 flex justify-between items-center bg-bg/80 backdrop-blur-md">
       <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
         {/* Logo removed */}
       </div>
@@ -175,7 +175,7 @@ export default function App() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-brand mb-6 md:mb-8 block">Verified Stock Tile Showroom</span>
             <h1 className="heading-giant mb-8 md:mb-12">
-              예산 안에서<br />좋은 타일은 <span className="text-brand">이미 여기에.</span>
+              예산 안에서<br />좋은 타일은 <span className="text-brand">이미 여기에</span>
             </h1>
             <p className="text-xl md:text-3xl font-medium tracking-tight opacity-70 mb-10 md:mb-16 w-full leading-relaxed">
               600각 박스 1만원부터 — 벨라세라믹의 자원순환 프로젝트로 만든 진짜 가성비.<br />
@@ -424,7 +424,7 @@ export default function App() {
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] opacity-40 mb-8 md:mb-12 block">— 전문가들의 리얼 보이스 —</span>
             <h2 className="font-sans text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-none text-dark mb-8 md:mb-12">
-              " 이 가격에 <span className="text-brand underline decoration-4 underline-offset-8">이 제품이요?</span> "
+              " 이 가격 <span className="text-brand underline decoration-4 underline-offset-8">정말 맞나요?</span> "
             </h2>
             <div className="max-w-3xl mx-auto space-y-6 md:space-y-8 text-lg md:text-2xl font-medium opacity-60 leading-relaxed italic px-4">
               <p>우리는 압니다. <br /> 싸면 의심부터 하게 된다는 것을.</p>
