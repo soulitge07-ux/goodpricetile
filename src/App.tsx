@@ -5,7 +5,7 @@
 
 import React, { useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
+import {
   Menu, 
   X, 
   ArrowRight,
@@ -24,110 +24,43 @@ import {
   Briefcase
 } from "lucide-react";
 
-// Interactive Storytelling Hero Component
-const InteractiveHero = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  return (
-    <div 
-      className="relative w-full aspect-square schematic-border bg-dark/5 overflow-hidden cursor-none group"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+// 3D Floating Shape — adapted from ElegantShape
+const ElegantShape = ({
+  className,
+  delay = 0,
+  width = 400,
+  height = 100,
+  rotate = 0,
+  gradient = "from-dark/[0.08]",
+}: {
+  className?: string;
+  delay?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+  gradient?: string;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+    animate={{ opacity: 1, y: 0, rotate }}
+    transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
+    className={`absolute ${className}`}
+  >
+    <motion.div
+      animate={{ y: [0, 15, 0] }}
+      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      style={{ width, height }}
+      className="relative"
     >
-      {/* Background Story Layers */}
-      <div className="absolute inset-0 p-8 md:p-12 flex items-center justify-center">
-        {/* State 1: Forgotten (Always there but dimmed) */}
-        <div className="relative w-full h-full opacity-20">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Spider Webs */}
-            <path d="M0 0 L40 40 M0 20 L20 40 M20 0 L40 20" stroke="currentColor" strokeWidth="0.5" className="text-dark" strokeDasharray="2 2" />
-            <path d="M160 0 L200 40 M180 0 L200 20 M160 20 L180 40" stroke="currentColor" strokeWidth="0.5" className="text-dark" strokeDasharray="2 2" />
-            
-            {/* Background Tiles (Dull) */}
-            <rect x="70" y="70" width="60" height="60" fill="none" stroke="currentColor" strokeWidth="1" className="text-dark" />
-            <text x="100" y="150" textAnchor="middle" className="text-[6px] font-black uppercase opacity-20">Forgotten Gem</text>
-          </svg>
-        </div>
-      </div>
-
-      {/* State 2: Reclaimed (Revealed by Spotlight) */}
-      <div 
-        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-500"
+      <div
+        className={`absolute inset-0 rounded-full bg-gradient-to-r to-transparent ${gradient} backdrop-blur-[2px] border-2 border-dark/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.04)]`}
         style={{
-          opacity: isHovered ? 1 : 0,
-          WebkitMaskImage: `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, black 0%, transparent 100%)`,
-          maskImage: `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, black 0%, transparent 100%)`,
+          background: `radial-gradient(circle at 50% 50%, rgba(204,84,58,0.06), transparent 70%)`,
         }}
-      >
-        <div className="absolute inset-0 bg-brand/10 p-8 md:p-12 flex items-center justify-center">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            {/* Sparkles */}
-            <motion.path 
-              animate={{ opacity: [0, 1, 0] }} 
-              transition={{ duration: 2, repeat: Infinity }}
-              d="M150 50 L155 45 M150 45 L155 50" stroke="#CC543A" strokeWidth="1" 
-            />
-            <motion.path 
-              animate={{ opacity: [0, 1, 0] }} 
-              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-              d="M40 140 L45 135 M40 135 L45 140" stroke="#CC543A" strokeWidth="1" 
-            />
-
-            {/* Reclaimed Tile Character */}
-            <g transform="translate(70, 70)">
-              <rect width="60" height="60" fill="white" stroke="#CC543A" strokeWidth="2" className="shadow-2xl" />
-              
-              {/* Eyes that follow mouse */}
-              <g transform={`translate(${30 + (mousePos.x - mousePos.x/1.1)/20}, ${25 + (mousePos.y - mousePos.y/1.1)/20})`}>
-                <circle cx="-10" cy="0" r="3" fill="#141414" />
-                <circle cx="10" cy="0" r="3" fill="#141414" />
-                {/* Blinking effect */}
-                <motion.rect 
-                  animate={{ scaleY: [1, 0, 1] }} 
-                  transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4 }}
-                  x="-14" y="-4" width="8" height="8" fill="#F5E9DC"
-                />
-                <motion.rect 
-                  animate={{ scaleY: [1, 0, 1] }} 
-                  transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4 }}
-                  x="6" y="-4" width="8" height="8" fill="#F5E9DC"
-                />
-              </g>
-              
-              {/* Happy Mouth */}
-              <path d="M22 40 Q30 46 38 40" fill="none" stroke="#141414" strokeWidth="2" strokeLinecap="round" />
-            </g>
-            
-            <text x="100" y="160" textAnchor="middle" className="text-[8px] font-black uppercase text-brand tracking-widest">Reclaimed Quality</text>
-          </svg>
-        </div>
-      </div>
-
-      {/* Cursor Spotlight Frame */}
-      <motion.div 
-        animate={{ x: mousePos.x - 60, y: mousePos.y - 60, opacity: isHovered ? 1 : 0 }}
-        className="absolute top-0 left-0 w-[120px] h-[120px] border-2 border-brand rounded-full z-30 pointer-events-none flex items-center justify-center"
-      >
-        <div className="w-1 h-1 bg-brand rounded-full"></div>
-      </motion.div>
-
-      {/* Instruction text (Visible when not hovered) */}
-      <div className={`absolute bottom-8 left-0 w-full text-center transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-0' : 'opacity-40'}`}>
-        <span className="text-[10px] font-black uppercase tracking-[0.3em]">Hover to find hidden gems</span>
-      </div>
-    </div>
-  );
-};
+      />
+    </motion.div>
+  </motion.div>
+);
 
 const Section = ({ children, className, id, dark = false, style }: { children: ReactNode, className?: string, id?: string, dark?: boolean, style?: React.CSSProperties }) => (
   <section id={id} style={style} className={`section-padding border-b border-dark/10 relative ${dark ? "bg-dark text-bg" : "bg-bg text-dark"} ${className}`}>
@@ -141,14 +74,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav className="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center bg-bg/80 backdrop-blur-md">
-      <div className="flex items-center gap-3 cursor-pointer">
-        <div className="w-10 h-10 schematic-border flex items-center justify-center p-2 bg-dark text-bg">
-          <Layers className="w-full h-full" />
-        </div>
-        <div className="flex flex-col -space-y-1">
-          <span className="font-black uppercase tracking-tighter text-2xl">GoodPriceTile</span>
-          <span className="text-[9px] font-bold tracking-[0.2em] opacity-40 uppercase">Nonhyeon Showroom</span>
-        </div>
+      <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+        {/* Logo removed */}
       </div>
       
       <div className="hidden md:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.2em] opacity-60">
@@ -175,8 +102,7 @@ const Navbar = () => {
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 bg-white z-50 flex flex-col p-12 overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-16">
-              <span className="font-black uppercase tracking-tighter text-2xl">GoodPriceTile</span>
+            <div className="flex justify-end items-center mb-16">
               <button onClick={() => setIsOpen(false)} className="p-4 schematic-border"><X /></button>
             </div>
             <div className="flex flex-col gap-8">
@@ -198,38 +124,78 @@ export default function App() {
 
       {/* SECTION 1. HERO */}
       <section className="min-h-[90vh] pt-32 pb-20 md:pt-40 md:pb-24 px-6 md:px-16 flex flex-col justify-center border-b border-dark/10 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          <div className="lg:col-span-7">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-brand mb-6 md:mb-8 block">Verified Stock Tile Showroom</span>
-              <h1 className="heading-giant mb-8 md:mb-12">
-                예산 안에서<br />좋은 타일은<br /><span className="text-brand">이미 여기에.</span>
-              </h1>
-              <p className="text-xl md:text-3xl font-medium tracking-tight opacity-70 mb-10 md:mb-16 max-w-2xl leading-relaxed">
-                600각 박스 1만원부터 — 벨라세라믹이 20년간 구축한 네트워크가 찾아낸 진짜 가성비 쇼룸.<br /> 
-                <span className="text-dark font-bold underline decoration-brand/30 decoration-4 underline-offset-4">인테리어 전문가를 위한 프라이빗 프로젝트 입니다.</span>
-              </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6">
-                <a 
-                  href={import.meta.env.VITE_RESERVATION_URL || "#"} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="cta-primary flex items-center justify-center gap-4 group"
-                >
-                  <span>쇼룸 방문 예약하기</span>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </a>
-                <div className="flex items-center gap-4 px-4 text-[10px] md:text-xs font-bold uppercase tracking-widest opacity-40">
-                  <Database className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>벨라세라믹 직접 검증 재고</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-          <div className="lg:col-span-5 hidden lg:block">
-            <InteractiveHero />
-          </div>
+        {/* 3D Floating Shapes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <ElegantShape
+            delay={0.3}
+            width={500}
+            height={120}
+            rotate={12}
+            gradient="from-brand/[0.08]"
+            className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+          />
+          <ElegantShape
+            delay={0.5}
+            width={420}
+            height={100}
+            rotate={-15}
+            gradient="from-brand/[0.06]"
+            className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+          />
+          <ElegantShape
+            delay={0.4}
+            width={260}
+            height={70}
+            rotate={-8}
+            gradient="from-dark/[0.04]"
+            className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+          />
+          <ElegantShape
+            delay={0.6}
+            width={180}
+            height={50}
+            rotate={20}
+            gradient="from-brand/[0.10]"
+            className="right-[10%] md:right-[15%] top-[8%] md:top-[12%]"
+          />
+          <ElegantShape
+            delay={0.7}
+            width={140}
+            height={36}
+            rotate={-25}
+            gradient="from-dark/[0.03]"
+            className="left-[20%] md:left-[25%] top-[5%] md:top-[8%]"
+          />
         </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-brand mb-6 md:mb-8 block">Verified Stock Tile Showroom</span>
+            <h1 className="heading-giant mb-8 md:mb-12">
+              예산 안에서<br />좋은 타일은 <span className="text-brand">이미 여기에.</span>
+            </h1>
+            <p className="text-xl md:text-3xl font-medium tracking-tight opacity-70 mb-10 md:mb-16 w-full leading-relaxed">
+              600각 박스 1만원부터 — 벨라세라믹의 자원순환 프로젝트로 만든 진짜 가성비.<br />
+              <span className="text-dark font-bold underline decoration-brand/30 decoration-4 underline-offset-4">인테리어 전문가를 위한 프라이빗 네트워크 쇼룸 입니다.</span>
+            </p>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6">
+              <a
+                href={import.meta.env.VITE_RESERVATION_URL || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-primary flex items-center justify-center gap-4 group"
+              >
+                <span>쇼룸 방문 예약하기</span>
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+              </a>
+              <div className="flex items-center gap-4 px-4 text-[10px] md:text-xs font-bold uppercase tracking-widest opacity-40">
+                <Database className="w-4 h-4 md:w-5 md:h-5" />
+                <span>벨라세라믹 직접 검증 재고</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
         {/* Background Grid Pattern */}
         <div className="absolute inset-0 z-[-1] opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
       </section>
@@ -260,6 +226,190 @@ export default function App() {
               <li className="flex items-center gap-4"><ChevronRight className="text-brand shrink-0" /> 당일 출고 가능 재고 확보</li>
             </ul>
           </div>
+        </div>
+      </Section>
+
+      {/* SECTION 3. HOW — 어떻게 가능하냐고요? */}
+      <Section dark className="!py-24 md:!py-40 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="mb-12 md:mb-20"
+        >
+          <h2 className="text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1]">
+            창고에서 잊혀진 타일,<br />
+            <span className="text-brand">이제 당신이 발견할 차례.</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[
+            {
+              step: "01",
+              label: "Forgotten",
+              title: "창고에서 잊혀진 타일",
+              desc: "단종·재고·초과발주, 프로젝트 납품 후 남은 좋은 타일이 창고 한켠에서 빛을 보지 못하고 잠들어 있습니다.",
+              icon: (inView: boolean) => (
+                <svg viewBox="0 0 110 110" fill="none" className="w-24 h-24 md:w-28 md:h-28">
+                  <rect x="15" y="52" width="80" height="48" rx="3" stroke="#9CA3AF" strokeWidth="1.6"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <path d="M10 52 L100 52 L93 38 L17 38 Z" stroke="#9CA3AF" strokeWidth="1.6"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <line x1="15" y1="70" x2="95" y2="70" stroke="#9CA3AF" strokeWidth="0.9" opacity="0.5"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="26" y="74" width="16" height="13" rx="1.5" stroke="#9CA3AF" strokeWidth="1.1" opacity="0.6"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <rect x="47" y="74" width="16" height="13" rx="1.5" stroke="#9CA3AF" strokeWidth="1.1" opacity="0.6"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <rect x="68" y="74" width="16" height="13" rx="1.5" stroke="#9CA3AF" strokeWidth="1.1" opacity="0.6"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M15 38 Q4 20 14 12 Q11 26 24 30" stroke="#9CA3AF" strokeWidth="0.7" opacity="0.55"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <circle cx="72" cy="24" r="2" fill="#9CA3AF" opacity={inView ? 0.3 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <circle cx="82" cy="16" r="1.5" fill="#9CA3AF" opacity={inView ? 0.2 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <circle cx="62" cy="18" r="1" fill="#9CA3AF" opacity={inView ? 0.25 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <text x="52" y="28" fill="#9CA3AF" fontSize="11" opacity={inView ? 0.4 : 0} fontFamily="Georgia,serif" letterSpacing="3" style={{ transition: 'opacity 0.5s ease 1s' }}>zzz</text>
+                </svg>
+              ),
+            },
+            {
+              step: "02",
+              label: "Rescued",
+              title: "발굴합니다",
+              desc: "벨라세라믹이 직접 발품을 팔아 숨어 있는 좋은 타일을 찾아냅니다.",
+              icon: (inView: boolean) => (
+                <svg viewBox="0 0 110 110" fill="none" className="w-24 h-24 md:w-28 md:h-28">
+                  <line x1="55" y1="8" x2="55" y2="40" stroke="#CC543A" strokeWidth="2"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <path d="M43 40 Q55 34 67 40 L67 62 Q67 70 55 70 Q43 70 43 62 Z" stroke="#9CA3AF" strokeWidth="1.5"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <path d="M48 40 L48 30 Q48 25 51 25 Q54 25 54 30 L54 40" stroke="#9CA3AF" strokeWidth="1.2"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M55 39 L55 28 Q55 23 58 23 Q61 23 61 28 L61 39" stroke="#9CA3AF" strokeWidth="1.2"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M63 40 L63 33 Q63 28 66 28 Q69 28 69 33 L69 40" stroke="#9CA3AF" strokeWidth="1.2"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <rect x="38" y="72" width="34" height="26" rx="3" stroke="#9CA3AF" strokeWidth="1.5"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M20 52 L23 47 L26 52 L23 57 Z" fill="#CC543A" opacity={inView ? 0.75 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <path d="M84 46 L87 41 L90 46 L87 51 Z" fill="#CC543A" opacity={inView ? 0.75 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <circle cx="26" cy="76" r="2.5" fill="#CC543A" opacity={inView ? 0.45 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                </svg>
+              ),
+            },
+            {
+              step: "03",
+              label: "Curated",
+              title: "선별합니다",
+              desc: "디자인과 품질을 꼼꼼히 따졌습니다. 저렴하다고 아무거나 팔지 않습니다.",
+              icon: (inView: boolean) => (
+                <svg viewBox="0 0 110 110" fill="none" className="w-24 h-24 md:w-28 md:h-28">
+                  <rect x="12" y="18" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="43" y="18" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="74" y="18" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="12" y="44" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="43" y="44" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="74" y="44" width="24" height="20" rx="2" stroke="#9CA3AF" strokeWidth="1.4"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <path d="M17 28 L22 33 L32 20" stroke="#CC543A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M48 54 L53 59 L63 46" stroke="#CC543A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <path d="M79 22 L96 38 M96 22 L79 38" stroke="#9CA3AF" strokeWidth="1.1" opacity="0.35" strokeLinecap="round"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <circle cx="83" cy="52" r="9" stroke="#9CA3AF" strokeWidth="1.5"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <line x1="89" y1="58" x2="98" y2="67" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <rect x="22" y="72" width="66" height="30" rx="2" stroke="#9CA3AF" strokeWidth="1" opacity="0.4"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <line x1="30" y1="82" x2="80" y2="82" stroke="#9CA3AF" strokeWidth="0.8" opacity="0.35"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <line x1="30" y1="90" x2="64" y2="90" stroke="#9CA3AF" strokeWidth="0.8" opacity="0.35"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                </svg>
+              ),
+            },
+            {
+              step: "04",
+              label: "Reclaimed",
+              title: "새로운 기회",
+              desc: "좋은 타일을 합리적인 가격에. 이것이 굿프라이스타일이 존재하는 이유입니다.",
+              icon: (inView: boolean) => (
+                <svg viewBox="0 0 110 110" fill="none" className="w-24 h-24 md:w-28 md:h-28">
+                  <rect x="43" y="18" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="26" y="40" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="60" y="40" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="8" y="62" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="43" y="62" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <rect x="78" y="62" width="24" height="18" rx="2" stroke="#9CA3AF" strokeWidth="1.4" fill="#9CA3AF" fillOpacity="0.07"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <circle cx="50" cy="26" r="2.2" fill="#CC543A" opacity={inView ? 1 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <circle cx="60" cy="26" r="2.2" fill="#CC543A" opacity={inView ? 1 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <path d="M48 31 Q55 35 62 31" stroke="#CC543A" strokeWidth="1.5" fill="none" strokeLinecap="round"
+                    opacity={inView ? 1 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <line x1="4" y1="82" x2="106" y2="82" stroke="#9CA3AF" strokeWidth="0.8" opacity="0.2"
+                    strokeDasharray="500" strokeDashoffset={inView ? 0 : 500} style={{ transition: 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)' }} />
+                  <path d="M72 10 L96 10 L96 26 L72 26 Z" stroke="#CC543A" strokeWidth="1.3"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                  <circle cx="77" cy="16" r="1.8" fill="#CC543A" opacity={inView ? 1 : 0} style={{ transition: 'opacity 0.5s ease 1s' }} />
+                  <text x="76" y="25" fill="#CC543A" fontSize="8" fontFamily="sans-serif" fontWeight="700"
+                    opacity={inView ? 1 : 0} style={{ transition: 'opacity 0.5s ease 1s' }}>₩</text>
+                  <line x1="72" y1="18" x2="67" y2="18" stroke="#CC543A" strokeWidth="0.9" opacity="0.7"
+                    strokeDasharray="300" strokeDashoffset={inView ? 0 : 300} style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.4s' }} />
+                </svg>
+              ),
+            },
+            {
+              step: "05",
+              label: "Your Choice",
+              title: "당신의 안목으로 완성됩니다",
+              desc: "이 프로젝트에 동참하세요. 폐기물을 줄이고, 경제적 혜택을 얻고, 좋은 취향을 나눕니다.",
+              icon: (_inView: boolean) => (
+                <svg viewBox="0 0 110 110" fill="none" className="w-24 h-24 md:w-28 md:h-28">
+                  <circle cx="55" cy="22" r="10" stroke="#CC543A" strokeWidth="1.5" fill="none" />
+                  <path d="M35 55 Q35 38 55 38 Q75 38 75 55 L75 60 L35 60 Z" stroke="#CC543A" strokeWidth="1.5" fill="none" />
+                  <path d="M47 72 Q47 66 55 66 Q63 66 63 72 Q63 80 55 88 Q47 80 47 72 Z" stroke="#CC543A" strokeWidth="1.3" fill="none" />
+                  <path d="M22 78 Q18 68 28 65" stroke="#9CA3AF" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+                  <path d="M28 65 L24 62 L31 63" stroke="#9CA3AF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.7" />
+                  <path d="M88 78 Q92 68 82 65" stroke="#9CA3AF" strokeWidth="1.2" strokeLinecap="round" fill="none" />
+                  <path d="M82 65 L86 62 L79 63" stroke="#9CA3AF" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.7" />
+                  <path d="M20 45 L23 40 L26 45 L23 50 Z" fill="#CC543A" opacity="0.6" />
+                  <path d="M84 40 L87 35 L90 40 L87 45 Z" fill="#CC543A" opacity="0.6" />
+                  <circle cx="15" cy="60" r="2" fill="#CC543A" opacity="0.35" />
+                  <circle cx="95" cy="55" r="1.5" fill="#CC543A" opacity="0.3" />
+                </svg>
+              ),
+            },
+          ].map((card, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.15 }}
+              className="bg-white/[0.03] rounded-2xl p-8 md:p-9 flex flex-col hover:bg-white/[0.06] transition-colors duration-300 group"
+            >
+              <div className="h-32 md:h-36 flex items-center justify-center mb-7 overflow-hidden rounded-xl">
+                {card.icon(true)}
+              </div>
+              <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-brand mb-2.5">{card.step} · {card.label}</span>
+              <h4 className="text-lg md:text-xl font-black text-bg mb-2.5 tracking-tight">{card.title}</h4>
+              <p className="text-[13px] font-light text-bg/40 leading-[1.85]">{card.desc}</p>
+            </motion.div>
+          ))}
         </div>
       </Section>
 
@@ -376,7 +526,7 @@ export default function App() {
                 className="cta-primary w-full max-w-[320px] sm:max-w-md md:max-w-xl flex items-center justify-center gap-4 md:gap-6 group"
               >
                 <MapPin className="w-6 h-6 md:w-8 md:h-8" />
-                <span className="text-base sm:text-lg md:text-2xl">네이버 지도로 위치 확인 현장 방문</span>
+                <span className="text-base sm:text-lg md:text-2xl">방문 예약 하기</span>
                 <ExternalLink className="w-4 h-4 md:w-5 md:h-5 opacity-40 shrink-0" />
               </a>
               <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-[320px] sm:max-w-md md:max-w-xl">
@@ -404,8 +554,7 @@ export default function App() {
       {/* FOOTER */}
       <footer className="py-20 px-12 md:px-24 border-t border-dark/10 flex flex-col md:flex-row justify-between items-center gap-12 bg-bg text-dark font-black uppercase text-[10px] tracking-[0.3em]">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-dark text-bg flex items-center justify-center p-1">G</div>
-          <span>Good Price Tile @ Bella Ceramic</span>
+          {/* Logo removed */}
         </div>
         <div className="flex flex-wrap justify-center gap-12 opacity-50">
           <a href={import.meta.env.VITE_INSTAGRAM_URL || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Instagram</a>
