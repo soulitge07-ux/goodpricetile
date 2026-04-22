@@ -82,10 +82,8 @@ const Navbar = () => {
         <a href="#about" className="hover:text-brand hover:opacity-100 transition-all">About</a>
         <a href="#trust" className="hover:text-brand hover:opacity-100 transition-all">Trust</a>
         <a href="#guide" className="hover:text-brand hover:opacity-100 transition-all">Guide</a>
-        <a 
-          href={"https://naver.me/F0znYoRG"} 
-          target="_blank" 
-          rel="noopener noreferrer" 
+        <a
+          href="#cta"
           className="bg-dark text-bg px-6 py-3 hover:bg-brand transition-all"
         >
           Reservation
@@ -106,8 +104,13 @@ const Navbar = () => {
               <button onClick={() => setIsOpen(false)} className="p-4 schematic-border"><X /></button>
             </div>
             <div className="flex flex-col gap-8">
-              {['About', 'Trust', 'Guide', 'Reservation'].map((item) => (
-                <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setIsOpen(false)} className="text-6xl font-black uppercase tracking-tighter hover:text-brand transition-all">{item}</a>
+              {[
+                { label: 'About', href: '#about' },
+                { label: 'Trust', href: '#trust' },
+                { label: 'Guide', href: '#guide' },
+                { label: 'Reservation', href: '#cta' },
+              ].map((item) => (
+                <a key={item.label} href={item.href} onClick={() => setIsOpen(false)} className="text-6xl font-black uppercase tracking-tighter hover:text-brand transition-all">{item.label}</a>
               ))}
             </div>
           </motion.div>
@@ -180,9 +183,7 @@ export default function App() {
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-6">
               <a
-                href={"https://naver.me/F0znYoRG"}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#cta"
                 className="cta-primary flex items-center justify-center gap-4 group"
               >
                 <span>쇼룸 방문 예약하기</span>
@@ -559,7 +560,7 @@ export default function App() {
         <div className="flex flex-wrap justify-center gap-12 opacity-50">
           <a href={"https://instagram.com/_bellaceramic"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Instagram</a>
           <a href={"https://blog.naver.com/bellaceramic1"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Blog</a>
-          <a href="#about" className="hover:text-brand hover:opacity-100 transition-all">About Us</a>
+          <a href="https://bellaceramic.co.kr" target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Website</a>
           <a href={"https://naver.me/F0znYoRG"} target="_blank" rel="noopener noreferrer" className="hover:text-brand hover:opacity-100 transition-all">Directions</a>
         </div>
         <div className="opacity-30">
